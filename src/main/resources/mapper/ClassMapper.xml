@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.ClassMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.Class">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="classteacher" jdbcType="INTEGER" property="classteacher" />
+    <result column="classname" jdbcType="CHAR" property="classname" />
+    <result column="stunum" jdbcType="INTEGER" property="stunum" />
+    <result column="classdescr" jdbcType="VARCHAR" property="classdescr" />
+    <result column="classboard" jdbcType="VARCHAR" property="classboard" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+</mapper>

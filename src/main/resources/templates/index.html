@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>单词角</title>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  />
+
+</head>
+
+<body>
+<div class="wrap">
+    <!--header-->
+    <div class="header">
+        <div class=" nav">
+            <span class="menu" th:text="${username}" ><img th:src="@{/images/menu.png}" alt=""></span>
+            <ul>
+                <li><a href="" ><i class="myinfo"> </i> 我的信息</a></li>
+                <li><a href="" ><i class="mydata"> </i> 我的数据</a></li>
+                <li><a href="" id="exit">退出</a></li>
+            </ul>
+            <script>
+                $(".nav ul").slideToggle(500, function(){
+                });
+                $("span.menu").click(function(){
+                    $(".nav ul").slideToggle(500, function(){
+                    });
+                });
+            </script>
+        </div>
+        <div class="header-top">
+            <div class=" top-menu">
+                <span class="menu1">Menu </span>
+                <ul>
+                    <li><a th:href="@{/index}">首页</a></li>
+                    <li><a href="/user/dailyWord">每日单词</a></li>
+                    <li><a th:href="@{/user/wordTest}">单词考核</a></li>
+                    <li><a th:href="@{/user/myWord}">我的单词</a></li>
+                    <li><a th:href="@{/user/myClass}">我的班级</a></li>
+                    <li><a th:href="@{/user/corner}">角落</a></li>
+                </ul>
+                <script>
+                    $("span.menu1").click(function(){
+                        $(".top-menu ul").slideToggle(500, function(){
+                        });
+                    });
+                </script>
+
+            </div>
+            <div class="search">
+                <form action="">
+                    <input type="text" value="Search" name="key" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'search';}" >
+                    <input type="submit" value="" >
+                </form>
+            </div>
+            <div class="clear"> </div>
+
+        </div>
+        <div class="clear"> </div>
+    </div>
+    <!--//header-->
+    <div style="height:280px;margin-top:10px;" id="ad">
+        <img th:src="@{/images/banner.jpg}" style="width:100%;height:100%;"/>
+    </div>
+    <!--横幅-->
+    <!--comments-->
+    <div class="comments">
+        <div class="comment">
+            <!---->
+            <div class="comment-top">
+                <div class="comments-top-top" id="shuoshuo1" style="display:none;">
+                    <div class="top-comment-left">
+                        <img class="img-responsive" th:src="@{/images/co.png}" alt="">
+                    </div>
+                    <div class="top-comment-right">
+                        <h5 id="user1">.</h5>
+                        <span id="shuocomment1">.</span>
+                        <div class="three">
+                            <a id="shuotime1">time:<i> </i></a>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="comments-top-top" id="shuoshuo2" style="display:none;">
+                    <div class="top-comment-left">
+                        <img class="img-responsive" th:src="@{/images/co.png}" alt="">
+                    </div>
+                    <div class="top-comment-right">
+                        <h5 id="user2">.</h5>
+                        <span id="shuocomment2">.</span>
+                        <div class="three">
+                            <a id="shuotime2">time:<i> </i></a>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="comments-top-top" id="shuoshuo3" style="display:none;">
+                    <div class="top-comment-left">
+                        <img class="img-responsive" th:src="@{/images/co.png}" alt="">
+                    </div>
+                    <div class="top-comment-right">
+                        <h5 id="user3">.</h5>
+                        <span id="shuocomment3">.</span>
+                        <div class="three">
+                            <a id="shuotime3">time<i> </i></a>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+            </div>
+            <!---->
+            <!---->
+            <div class="comment-form">
+                <form>
+                    <div class="form-top">
+                        <div class="clear"> </div>
+                    </div>
+                    <textarea id="scomment" placeholder="说说你现在的想法吧" required></textarea>
+                </form>
+                <input id="report" type="submit" value="发表">
+            </div>
+            <!---->
+        </div>
+        <!--计划-->
+        <div class="plans">
+            <div class="col-md1">
+                <div class="pricing-table-grid">
+                    <div class="plans_head">
+                        <a href="" id="mysign" style="color:#FFFFFF;">签到</a>
+                    </div>
+                    <ul>
+                        <li> <h4 class="m_4"><small class="m_2">今日学习单词</small><a id="todaywords">0</a><small  class="m_3">/20</small></h4></li>
+                        <li><span> 今日考核<a id="check">已</a>完成</span></li>
+                        <li><span> 单词本词汇量达<a id="words">0</a></span></li>
+                        <li><span> 已连续签到<a id="signdays">5</a>天</span></li>
+                    </ul>
+                    <!---->
+                    <a class=" button" href="#"><i> </i>开始学习今日单词</a>
+                </div>
+            </div>
+            <!--计划结束-->
+            <div class="clear"> </div>
+        </div>
+
+        <div class="clear"> </div>
+    </div>
+
+    <div class="footer">
+        <p>单词角 | All Rights Reserved |2018</p>
+    </div>
+    <!--//content-->
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            url:"/user/indexInfo",
+            type:"POST",
+            async:false,
+            dataType:"json",
+            success: function(data){
+                var jjson = data.json;
+                var sign = data.sign;
+                var signdays = data.signdays;
+                var check = data.check;
+                var wordcounts = data.wordcounts;
+                var daystoday = data.daystoday;
+                if(sign=="1"){
+                    $("#mysign").text("已签到");
+                    $("#mysign").attr("id","signed");
+                }
+                else{
+                };
+                if(check=="0"){
+                    $("#check").text("未");
+                }
+                $("#todaywords").text(daystoday);
+                $("#words").text(wordcounts);
+                $("#signdays").text(signdays);
+                for(var i=0;i<jjson.length;i++){
+
+                    if(i==0){
+                        $("#user1").text(jjson[0].username);
+                        $("#shuocomment1").text(jjson[0].shuoshuo);
+                        $("#shuotime1").text(jjson[0].createtime);
+                        $("#shuoshuo1").show();
+                    }
+                    if(i==1){
+                        $("#user2").text(jjson[1].username);
+                        $("#shuocomment2").text(jjson[1].shuoshuo);
+                        $("#shuotime2").text(jjson[1].createtime);
+                        $("#shuoshuo2").show();
+                    }
+                    if(i==2){
+                        $("#user3").text(jjson[2].username);
+                        $("#shuocomment3").text(jjson[2].shuoshuo);
+                        $("#shuotime3").text(jjson[2].createtime);
+                        $("#shuoshuo3").show();
+                    }
+                }
+            },
+            error: function(){
+                alert("Error!");
+            }
+        });
+    });
+    // $("#report").click(function (){
+    //     var s = document.getElementById("scomment").value;
+    //     $.ajax({
+    //         url:"ajax/Createshuoshuo.action",
+    //         type:"post",
+    //         async:false,
+    //         dataType:"json",
+    //         data:{
+    //             uname:"<%=username%>",
+    //             sscontent:s
+    //         },
+    //         success: function(data){
+    //             alert("发表成功！");
+    //             window.location.reload();
+    //         },
+    //         error: function(){
+    //             alert("Error!");
+    //         }
+    //     });
+    // });
+    // $("#mysign").click(function (){
+    //     $.ajax({
+    //         url:"ajax/Sign.action",
+    //         type:"post",
+    //         async:false,
+    //         dataType:"json",
+    //         data:{
+    //             uname:"<%=username%>",
+    //         },
+    //         success: function(data){
+    //             var signs = data.signdays;
+    //             $("#mysign").text("已签到");
+    //             alert("签到成功~");
+    //             $("#signdays").text(signs);
+    //             $("#mysign").attr("id","signed");
+    //         }
+    //
+    //     });
+    // });
+</script>
+</body>
+</html>

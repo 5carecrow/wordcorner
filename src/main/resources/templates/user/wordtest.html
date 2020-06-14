@@ -1,0 +1,616 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>单词角</title>
+
+    <meta charset="UTF-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/fakeLoader.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/fakeLoader.css" rel="stylesheet" type="text/css"/>
+
+</head>
+
+<body>
+<div class="wrap">
+    <div th:replace="user/top :: top"></div>
+    <div id="main" style="height:600px;background: #02557e;text-align:center;margin-top:-20px;">
+        <div style="height:40px;"><a style="float:left;color:#E6E6FA;font-size:28px;margin-left:6px;">单词考核 </a></div>
+        <div id="blackbak" style="width:90%;height:80%;opacity:0.7;background:#000000;border-radius: 60px;margin:0 auto;margin-top:20px;">
+            <div class="wordtest" id="wordtest1">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="wordtitle" id="wordtitle"></a></li><li><a class="pronun" id="pronun" ></a></li></ul></div>
+                <div class="floor" style="height:40%;"><button type="button" class="readytest" id="readytest">开始单词考核</button></div>
+                <div class="floor" style="height:30%;"></div>
+            </div>
+            <div class="wordtest" id="wordtest2" style="display: none;">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="question">请选出单词的正确解释</a></li><li><a class="quewordtitle" id="quewordtitle">//////</a></li></ul></div>
+                <div class="selecttestword" style="height:45%;">
+                    <button type="button" class="tword1" id="">那就这样吧</button>
+                    <button type="button" class="tword2" id="">- -||</button>
+                    <button type="button" class="tword3" id="">- -||</button>
+                    <button type="button" class="tword4" id="">- -||</button>
+                </div>
+                <div class="floor" style="height:25%;"><span style="float:right;font-size:54px;color:#FFF;margin-top:40px;margin-right:100px;"><a id="wordno2"></a><a>/20</a></span></div>
+            </div>
+            <div class="wordtest" id="wordtest3" style="display: none;">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="exwordtitle" id="exwordtitle">this is a word</a></li><li><a class="selectwordprompt" id="selectwordprompt">这是一个结果提示</a></li></ul></div>
+                <div class="floor" style="height:40%;"><a id="truewordexplain"></a></div>
+                <div class="floor" style="height:30%;"><div style="width:15%;height:10%;float:left;display:inline;"></div><button id="dongle">我记住了</button><button id="tiaoguo">换个单词记</button>
+                    <span style="float:right;font-size:54px;color:#FFF;margin-top:40px;margin-right:100px;"><a id="wordno3"></a><a>/20</a></span>
+                </div>
+            </div>
+            <div class="wordtest" id="wordtest4" style="display: none;"><a id="checkcomplete">您今日的单词考核任务已经完成。</a></div>
+        </div>
+    </div>
+    <div th:replace="user/foot :: foot"></div>
+</div>
+<script type="text/javascript">
+    function addtrue(){
+        $("#trueword").on("click",function(){
+            $("#trueword").attr("id","truewordres");
+            $("#truewordres").attr("disabled","disabled");
+            $("#falseword1").attr("disabled","disabled");
+            $("#falseword2").attr("disabled","disabled");
+            $("#falseword3").attr("disabled","disabled");
+            $.ajax({
+                url:"/user/TestWord",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    uname:"<%=username%>",
+                    start:"1",
+                    answer:"1"
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var tword = data.tword;
+                    var number = data.number;
+                    var trueexplain = data.trueexplain;
+                    var falseexplain1 = data.falseexplain1;
+                    var falseexplain2 = data.falseexplain2;
+                    var falseexplain3 = data.falseexplain3;
+                    var questionno = Number(number);
+                    setTimeout(function (){
+
+
+                        if(questionno>20){
+                            $("#wordtest2").hide();
+                            $("#wordtest4").show();
+                        }
+                        if(0<questionno&&questionno<21){
+                            $("#wordno2").text(number);
+                            $("#wordno3").text(number);
+                            $("#quewordtitle").text(tword);
+                            $("button").remove(".tword1");
+                            $("button").remove(".tword2");
+                            $("button").remove(".tword3");
+                            $("button").remove(".tword4");
+                            $(".selecttestword").append('<button type="button" class="tword1" id=""></button><button type="button" class="tword2" id=""></button><button type="button" class="tword3" id=""></button><button type="button" class="tword4" id=""></button>');
+                            var random = 10*Math.random();
+                            if(random>=7){
+                                $(".tword1").text(trueexplain);
+                                $(".tword1").attr("id","trueword");
+                                $(".tword2").text(falseexplain1);
+                                $(".tword2").attr("id","falseword1");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random<=2){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(trueexplain);
+                                $(".tword2").attr("id","trueword");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>2&&random<5){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(trueexplain);
+                                $(".tword3").attr("id","trueword");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>=5&&random<7){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(falseexplain3);
+                                $(".tword3").attr("id","falseword3");
+                                $(".tword4").text(trueexplain);
+                                $(".tword4").attr("id","trueword");
+                            };
+                            addtrue();
+                            addfalse();
+                        };
+                    }, 2000);
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+    };
+    function addfalse(){
+        $("#falseword1").on("click",function(){
+            $("#falseword1").attr("id","falsewordres");
+            $("#trueword").attr("id","truewordres");
+            $("#falsewordres").attr("disabled","disabled");
+            $("#truewordres").attr("disabled","disabled");
+            $("#falseword2").attr("disabled","disabled");
+            $("#falseword3").attr("disabled","disabled");
+            $.ajax({
+                url:"/user/TestWord",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    uname:"<%=username%>",
+                    start:"1",
+                    answer:"0"
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var tword = data.tword;
+                    var number = data.number;
+                    var trueexplain = data.trueexplain;
+                    var falseexplain1 = data.falseexplain1;
+                    var falseexplain2 = data.falseexplain2;
+                    var falseexplain3 = data.falseexplain3;
+                    var questionno = Number(number);
+                    setTimeout(function (){
+
+                        if(questionno>20){
+                            $("#wordtest2").hide();
+                            $("#wordtest4").show();
+                        }
+                        if(0<questionno&questionno<21){
+                            $("#wordno2").text(number);
+                            $("#wordno3").text(number);
+                            $("#quewordtitle").text(tword);
+                            $("button").remove(".tword1");
+                            $("button").remove(".tword2");
+                            $("button").remove(".tword3");
+                            $("button").remove(".tword4");
+                            $(".selecttestword").append('<button type="button" class="tword1" id=""></button><button type="button" class="tword2" id=""></button><button type="button" class="tword3" id=""></button><button type="button" class="tword4" id=""></button>');
+
+                            var random = 10*Math.random();
+                            if(random>=7){
+                                $(".tword1").text(trueexplain);
+                                $(".tword1").attr("id","trueword");
+                                $(".tword2").text(falseexplain1);
+                                $(".tword2").attr("id","falseword1");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random<=2){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(trueexplain);
+                                $(".tword2").attr("id","trueword");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>2&&random<5){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(trueexplain);
+                                $(".tword3").attr("id","trueword");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>=5&&random<7){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(falseexplain3);
+                                $(".tword3").attr("id","falseword3");
+                                $(".tword4").text(trueexplain);
+                                $(".tword4").attr("id","trueword");
+                            };
+                            addtrue();
+                            addfalse();
+                        };
+                    }, 2000);
+
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+        /* 错误效果*/
+        $("#falseword2").on("click",function(){
+            $("#falseword2").attr("id","falsewordres");
+            $("#trueword").attr("id","truewordres");
+            $("#falsewordres").attr("disabled","disabled");
+            $("#truewordres").attr("disabled","disabled");
+            $("#falseword1").attr("disabled","disabled");
+            $("#falseword3").attr("disabled","disabled");
+            $.ajax({
+                url:"ajax/Testword.action",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    uname:"<%=username%>",
+                    start:"1",
+                    answer:"0"
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var tword = data.tword;
+                    var number = data.number;
+                    var trueexplain = data.trueexplain;
+                    var falseexplain1 = data.falseexplain1;
+                    var falseexplain2 = data.falseexplain2;
+                    var falseexplain3 = data.falseexplain3;
+                    var questionno = Number(number);
+                    $("#trueword").attr("id","truewordres");
+                    setTimeout(function (){
+                        if(questionno>20){
+                            $("#wordtest2").hide();
+                            $("#wordtest4").show();
+                        }
+                        if(0<questionno&&questionno<21){
+                            $("#wordno2").text(number);
+                            $("#wordno3").text(number);
+                            $("#quewordtitle").text(tword);
+                            $("button").remove(".tword1");
+                            $("button").remove(".tword2");
+                            $("button").remove(".tword3");
+                            $("button").remove(".tword4");
+                            $(".selecttestword").append('<button type="button" class="tword1" id=""></button><button type="button" class="tword2" id=""></button><button type="button" class="tword3" id=""></button><button type="button" class="tword4" id=""></button>');
+
+                            var random = 10*Math.random();
+                            if(random>=7){
+                                $(".tword1").text(trueexplain);
+                                $(".tword1").attr("id","trueword");
+                                $(".tword2").text(falseexplain1);
+                                $(".tword2").attr("id","falseword1");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random<=2){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(trueexplain);
+                                $(".tword2").attr("id","trueword");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>2&&random<5){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(trueexplain);
+                                $(".tword3").attr("id","trueword");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>=5&&random<7){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(falseexplain3);
+                                $(".tword3").attr("id","falseword3");
+                                $(".tword4").text(trueexplain);
+                                $(".tword4").attr("id","trueword");
+                            };
+                            addtrue();
+                            addfalse();
+                        };
+                    }, 2000);
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+        $("#falseword3").on("click",function(){
+            $("#falseword3").attr("id","falsewordres");
+            $("#trueword").attr("id","truewordres");
+            $("#falsewordres").attr("disabled","disabled");
+            $("#truewordres").attr("disabled","disabled");
+            $("#falseword2").attr("disabled","disabled");
+            $("#falseword1").attr("disabled","disabled");
+            $.ajax({
+                url:"ajax/Testword.action",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    uname:"<%=username%>",
+                    start:"1",
+                    answer:"0"
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var tword = data.tword;
+                    var number = data.number;
+                    var trueexplain = data.trueexplain;
+                    var falseexplain1 = data.falseexplain1;
+                    var falseexplain2 = data.falseexplain2;
+                    var falseexplain3 = data.falseexplain3;
+                    var questionno = Number(number);
+                    $("#trueword").attr("id","truewordres");
+                    setTimeout(function (){
+                        if(questionno>20){
+                            $("#wordtest2").hide();
+                            $("#wordtest4").show();
+                        }
+                        if(0<questionno&&questionno<21){
+                            $("#wordno2").text(number);
+                            $("#wordno3").text(number);
+                            $("#quewordtitle").text(tword);
+                            $("button").remove(".tword1");
+                            $("button").remove(".tword2");
+                            $("button").remove(".tword3");
+                            $("button").remove(".tword4");
+                            $(".selecttestword").append('<button type="button" class="tword1" id=""></button><button type="button" class="tword2" id=""></button><button type="button" class="tword3" id=""></button><button type="button" class="tword4" id=""></button>');
+
+                            var random = 10*Math.random();
+                            if(random>=7){
+                                $(".tword1").text(trueexplain);
+                                $(".tword1").attr("id","trueword");
+                                $(".tword2").text(falseexplain1);
+                                $(".tword2").attr("id","falseword1");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random<=2){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(trueexplain);
+                                $(".tword2").attr("id","trueword");
+                                $(".tword3").text(falseexplain2);
+                                $(".tword3").attr("id","falseword2");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>2&&random<5){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(trueexplain);
+                                $(".tword3").attr("id","trueword");
+                                $(".tword4").text(falseexplain3);
+                                $(".tword4").attr("id","falseword3");
+                            };
+                            if(random>=5&&random<7){
+                                $(".tword1").text(falseexplain1);
+                                $(".tword1").attr("id","falseword1");
+                                $(".tword2").text(falseexplain2);
+                                $(".tword2").attr("id","falseword2");
+                                $(".tword3").text(falseexplain3);
+                                $(".tword3").attr("id","falseword3");
+                                $(".tword4").text(trueexplain);
+                                $(".tword4").attr("id","trueword");
+                            };
+                            addtrue();
+                            addfalse();
+                        };
+                    }, 2000);
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+    };
+
+    $(document).ready(function(){
+        $.ajax({
+            url:"ajax/Testword.action",
+            type:"post",
+            async:false,
+            dataType:"json",
+            data:{
+                uname:"<%=username%>",
+                start:"0"
+
+            },
+            success: function(data){
+                var wordid = data.wordid;
+                var tword = data.tword;
+                var number = data.number;
+                var trueexplain = data.trueexplain;
+                var falseexplain1 = data.falseexplain1;
+                var falseexplain2 = data.falseexplain2;
+                var falseexplain3 = data.falseexplain3;
+                var questionno = Number(number);
+                var checkcomp = data.checkcomp;
+                if(checkcomp!="0"){
+                    $("#wordtest1").hide();
+                    $("#wordtest4").show();
+                }
+                if(checkcomp=="-1"){
+                    $("#wordtest1").hide();
+                    $("#checkcomplete").text("您的单词本词汇量还不够，请积累单词后再测试！");
+                    $("#wordtest4").show();
+                }
+                if(questionno>20){
+                    $("#wordtest1").hide();
+                    $("#wordtest4").show();
+                }
+                if(0<questionno&&questionno<21){
+                    $("#wordno2").text(number);
+                    $("#wordno3").text(number);
+                    $("#quewordtitle").text(tword);
+
+                    var random = 10*Math.random();
+                    if(random>=7){
+                        $(".tword1").text(trueexplain);
+                        $(".tword1").attr("id","trueword");
+                        $(".tword2").text(falseexplain1);
+                        $(".tword2").attr("id","falseword1");
+                        $(".tword3").text(falseexplain2);
+                        $(".tword3").attr("id","falseword2");
+                        $(".tword4").text(falseexplain3);
+                        $(".tword4").attr("id","falseword3");
+                    };
+                    if(random<=2){
+                        $(".tword1").text(falseexplain1);
+                        $(".tword1").attr("id","falseword1");
+                        $(".tword2").text(trueexplain);
+                        $(".tword2").attr("id","trueword");
+                        $(".tword3").text(falseexplain2);
+                        $(".tword3").attr("id","falseword2");
+                        $(".tword4").text(falseexplain3);
+                        $(".tword4").attr("id","falseword3");
+                    };
+                    if(random>2&&random<5){
+                        $(".tword1").text(falseexplain1);
+                        $(".tword1").attr("id","falseword1");
+                        $(".tword2").text(falseexplain2);
+                        $(".tword2").attr("id","falseword2");
+                        $(".tword3").text(trueexplain);
+                        $(".tword3").attr("id","trueword");
+                        $(".tword4").text(falseexplain3);
+                        $(".tword4").attr("id","falseword3");
+                    };
+                    if(random>=5&&random<7){
+                        $(".tword1").text(falseexplain1);
+                        $(".tword1").attr("id","falseword1");
+                        $(".tword2").text(falseexplain2);
+                        $(".tword2").attr("id","falseword2");
+                        $(".tword3").text(falseexplain3);
+                        $(".tword3").attr("id","falseword3");
+                        $(".tword4").text(trueexplain);
+                        $(".tword4").attr("id","trueword");
+                    };
+                    addtrue();
+                    addfalse();
+                    $("#wordtest1").hide();
+                    $("#wordtest2").show();
+                };
+
+            },
+            error: function(){
+                alert("Error!");
+            },
+        });
+    });
+    $(function(){
+        $("#readytest").click(function(){
+            $.ajax({
+                url:"ajax/Testword.action",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    uname:"<%=username%>",
+                    start:"1",
+                    answer:"-1"
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var tword = data.tword;
+                    var number = data.number;
+                    var trueexplain = data.trueexplain;
+                    var falseexplain1 = data.falseexplain1;
+                    var falseexplain2 = data.falseexplain2;
+                    var falseexplain3 = data.falseexplain3;
+                    var questionno = Number(number);
+                    var checkcomp = data.checkcomp;
+                    if(checkcomp!="0"){
+                        $("#wordtest1").hide();
+                        $("#wordtest4").show();
+                    }
+                    if(questionno>20){
+                        $("#wordtest1").hide();
+                        $("#wordtest4").show();
+                    }
+                    if(0<questionno&&questionno<21){
+                        $("#wordno2").text(number);
+                        $("#wordno3").text(number);
+                        $("#quewordtitle").text(tword);
+
+                        $("button").remove(".tword1");
+                        $("button").remove(".tword2");
+                        $("button").remove(".tword3");
+                        $("button").remove(".tword4");
+                        $(".selecttestword").append('<button type="button" class="tword1" id=""></button><button type="button" class="tword2" id=""></button><button type="button" class="tword3" id=""></button><button type="button" class="tword4" id=""></button>');
+
+                        var random = 10*Math.random();
+                        if(random>=7){
+                            $(".tword1").text(trueexplain);
+                            $(".tword1").attr("id","trueword");
+                            $(".tword2").text(falseexplain1);
+                            $(".tword2").attr("id","falseword1");
+                            $(".tword3").text(falseexplain2);
+                            $(".tword3").attr("id","falseword2");
+                            $(".tword4").text(falseexplain3);
+                            $(".tword4").attr("id","falseword3");
+                        };
+                        if(random<=2){
+                            $(".tword1").text(falseexplain1);
+                            $(".tword1").attr("id","falseword1");
+                            $(".tword2").text(trueexplain);
+                            $(".tword2").attr("id","trueword");
+                            $(".tword3").text(falseexplain2);
+                            $(".tword3").attr("id","falseword2");
+                            $(".tword4").text(falseexplain3);
+                            $(".tword4").attr("id","falseword3");
+                        };
+                        if(random>2&&random<5){
+                            $(".tword1").text(falseexplain1);
+                            $(".tword1").attr("id","falseword1");
+                            $(".tword2").text(falseexplain2);
+                            $(".tword2").attr("id","falseword2");
+                            $(".tword3").text(trueexplain);
+                            $(".tword3").attr("id","trueword");
+                            $(".tword4").text(falseexplain3);
+                            $(".tword4").attr("id","falseword3");
+                        };
+                        if(random>=5&&random<7){
+                            $(".tword1").text(falseexplain1);
+                            $(".tword1").attr("id","falseword1");
+                            $(".tword2").text(falseexplain2);
+                            $(".tword2").attr("id","falseword2");
+                            $(".tword3").text(falseexplain3);
+                            $(".tword3").attr("id","falseword3");
+                            $(".tword4").text(trueexplain);
+                            $(".tword4").attr("id","trueword");
+                        };
+                        addtrue();
+                        addfalse();
+                        $("#wordtest1").hide();
+                        $("#wordtest2").show();
+                    };
+
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

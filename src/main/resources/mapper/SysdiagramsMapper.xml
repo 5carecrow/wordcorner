@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.SysdiagramsMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.Sysdiagrams">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="principal_id" jdbcType="INTEGER" property="principalId" />
+    <result column="diagram_id" jdbcType="INTEGER" property="diagramId" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="definition" jdbcType="LONGVARBINARY" property="definition" />
+  </resultMap>
+</mapper>

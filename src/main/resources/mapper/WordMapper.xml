@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.WordMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.Word">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="word" jdbcType="VARCHAR" property="word" />
+    <result column="ping" jdbcType="VARCHAR" property="ping" />
+    <result column="difficult" jdbcType="REAL" property="difficult" />
+    <result column="pronunciation" jdbcType="VARCHAR" property="pronunciation" />
+    <result column="wordexplain" jdbcType="LONGVARCHAR" property="wordexplain" />
+  </resultMap>
+  <select id="FindwordByDif" resultType="com.lanchaohao.wordcorner.domain.Word">
+    select * from word w where w.difficult between #{a} and #{b} order by rand() limit 1
+  </select>
+</mapper>

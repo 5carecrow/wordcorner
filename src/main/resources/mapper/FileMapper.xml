@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.FileMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.File">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ownid" jdbcType="INTEGER" property="ownid" />
+    <result column="filename" jdbcType="CHAR" property="filename" />
+    <result column="filelink" jdbcType="BINARY" property="filelink" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>单词角</title>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  />
+
+</head>
+
+<body>
+
+<div class="wrap">
+    <div th:replace="user/top :: top"></div>
+    <div id="main" style="height:600px;background: #02557e;text-align:center;margin-top:-20px;">
+        <div style="height:40px;"><a style="float:left;color:#E6E6FA;font-size:28px;margin-left:6px;">每日单词</a></div>
+        <div id="blackbak" style="width:90%;height:80%;opacity:0.7;background:#000000;border-radius: 60px;margin:0 auto;margin-top:20px;">
+            <div class="wordstudy" id="wordstudy1">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="wordtitle" id="wordtitle"></a></li><li><a id="pronunbefore"></a><a class="pronun" id="pronun" ></a></li></ul></div>
+                <div class="floor" style="height:40%;"><button type="button" class="renshi" id="renshi">认识</button><button type="button" class="burenshi" id="burenshi">不认识</button></div>
+                <div class="floor" style="height:30%;"><span style="float:right;font-size:54px;color:#FFF;margin-top:40px;margin-right:100px;"><a id="wordno1"></a><a>/20</a></span></div>
+            </div>
+            <div class="wordstudy" id="wordstudy2" style="display: none;">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="question">请选出单词的正确解释</a></li><li><a class="quewordtitle" id="quewordtitle">//////</a></li></ul></div>
+                <div class="selectword" style="height:40%;"><button type="button" class="sword1">那就这样吧</button><button type="button" class="sword2">- -||</button></div>
+                <div class="floor" style="height:30%;"><span style="float:right;font-size:54px;color:#FFF;margin-top:40px;margin-right:100px;"><a id="wordno2"></a><a>/20</a></span></div>
+            </div>
+            <div class="wordstudy" id="wordstudy3" style="display: none;">
+                <div class="floor" style="height:30%;text-align:center;" id="studyword"><ul><li><a class="exwordtitle" id="exwordtitle">this is a word</a></li><li><a class="selectwordprompt" id="selectwordprompt">这是一个结果提示</a></li></ul></div>
+                <div class="floor" style="height:40%;"><a id="truewordexplain"></a></div>
+                <div class="floor" style="height:30%;"><div style="width:15%;height:20%;float:left;display:inline;position: absolute;left: 30px;top: 20px;"></div><button id="dongle">我记住了</button><button id="tiaoguo">换个单词记</button>
+                    <div><span style="float:right;font-size:54px;color:#FFF;margin-top:-18px;margin-right:100px;"><a id="wordno3"></a><a>/20</a></span></div>
+                </div>
+            </div>
+            <div class="wordstudy" id="wordstudy4" style="display: none;"><a id="dailycomp">您的每日单词任务已经完成。</a></div>
+        </div>
+    </div>
+    <div th:replace="user/foot :: foot"></div>
+</div>
+<script type="text/javascript">
+
+    function addtrueevent(){
+        $("#trueword").on("click",function(){
+            $("#selectwordprompt").text("你果然认识这个单词！");
+            $("#wordstudy2").hide();
+            $("#wordstudy3").show();
+        });
+    };
+    function addfalseevent(){
+        $("#falseword").on("click",function(){
+            $("#selectwordprompt").text("你好像还不认识这个单词！");
+            $("#wordstudy2").hide();
+            $("#wordstudy3").show();
+
+        });
+    };
+
+    $(document).ready(function(){
+        $.ajax({
+            url:"/user/getDailyWord",
+            type:"post",
+            async:false,
+            dataType:"json",
+            success: function(data){
+                var wordid = data.wordid;
+                var word = data.word;
+                var pronun = data.pronun;
+                var anotherword = data.anotherword;
+                var number = data.number;
+                var wordexplain = data.wordexplain;
+                if(number=="21"){
+                    $("#wordstudy1").hide();
+                    $("#wordstudy2").hide();
+                    $("#wordstudy3").hide();
+                    $("#wordstudy4").show();
+                }
+                $("#wordno1").text(number);
+                $("#wordno2").text(number);
+                $("#wordno3").text(number);
+                $("#wordtitle").text(word);
+                $("#exwordtitle").text(word);
+                $("a").remove("#pronun");
+                $("#pronunbefore").append('<a class="pronun" id="pronun" >'+pronun+'</a>');
+                $("#quewordtitle").text(word);
+                $("#truewordexplain").text(wordexplain);
+                var random = 10*Math.random();
+                if(random>5){
+                    $(".sword1").text(wordexplain);
+                    $(".sword1").attr("id","trueword");
+                    $(".sword1").attr("name",wordid);
+                    $(".sword2").text(anotherword);
+                    $(".sword2").attr("id","falseword");
+                }
+                else{
+                    $(".sword2").text(wordexplain);
+                    $(".sword2").attr("id","trueword");
+                    $(".sword2").attr("name",wordid);
+                    $(".sword1").text(anotherword);
+                    $(".sword1").attr("id","falseword");
+                };
+                addtrueevent();
+                addfalseevent();
+            },
+            error: function(){
+                alert("Error!");
+            },
+        });
+    });
+
+    $(function(){
+
+        $("#renshi").click(function(){
+            $("#wordstudy1").hide();
+            $("#wordstudy2").show();
+        });
+        $("#burenshi").click(function(){
+            $("#selectwordprompt").text("");
+            $("#wordstudy1").hide();
+            $("#wordstudy3").show();
+        });
+        $("#dongle").click(function(){
+            $.ajax({
+                url:"/user/addToMyWord",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    postwordid:document.getElementById('trueword').name
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var word = data.word;
+                    var pronun = data.pronun;
+                    var anotherword = data.anotherword;
+                    var number = data.number;
+                    var wordexplain = data.wordexplain;
+                    if(number=="21"){
+                        $("#wordstudy1").hide();
+                        $("#wordstudy2").hide();
+                        $("#wordstudy3").hide();
+                        $("#wordstudy4").show();
+                    }
+                    $("#wordno1").text(number);
+                    $("#wordno2").text(number);
+                    $("#wordno3").text(number);
+                    $("#wordtitle").text(word);
+                    $("#exwordtitle").text(word);
+                    $("a").remove("#pronun");
+                    $("#pronunbefore").append('<a class="pronun" id="pronun" >'+pronun+'</a>');
+                    $("#quewordtitle").text(word);
+                    $("#truewordexplain").text(wordexplain);
+                    $("#wordtitle").attr("name",wordid);
+
+                    var random = 10*Math.random();
+                    if(random>5){
+                        $(".sword1").text(wordexplain);
+                        $(".sword1").attr("id","trueword");
+                        $(".sword1").attr("name",wordid);
+                        $(".sword2").text(anotherword);
+                        $(".sword2").attr("id","falseword");
+                    }
+                    else{
+                        $(".sword2").text(wordexplain);
+                        $(".sword2").attr("id","trueword");
+                        $(".sword2").attr("name",wordid);
+                        $(".sword1").text(anotherword);
+                        $(".sword1").attr("id","falseword");
+                    };
+                    addtrueevent();
+                    addfalseevent();
+                    $("#wordstudy3").hide();
+                    $("#wordstudy1").show();
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+
+        $("#tiaoguo").click(function(){
+            var mywordid = document.getElementById('wordtitle').name;
+            $.ajax({
+                url:"/user/getDailyWord",
+                type:"post",
+                async:false,
+                dataType:"json",
+                data:{
+                    postwordid:"0",
+                },
+                success: function(data){
+                    var wordid = data.wordid;
+                    var word = data.word;
+                    var pronun = data.pronun;
+                    var anotherword = data.anotherword;
+                    var number = data.number;
+                    var wordexplain = data.wordexplain;
+                    if(number=="21"){
+                        $("#wordstudy1").hide();
+                        $("#wordstudy2").hide();
+                        $("#wordstudy3").hide();
+                        $("#wordstudy4").show();
+                    }
+                    $("#wordno1").text(number);
+                    $("#wordno2").text(number);
+                    $("#wordno3").text(number);
+                    $("#wordtitle").text(word);
+                    $("#exwordtitle").text(word);
+                    $("a").remove("#pronun");
+                    $("#pronunbefore").append('<a class="pronun" id="pronun" >'+pronun+'</a>');
+                    $("#quewordtitle").text(word);
+                    $("#truewordexplain").text(wordexplain);
+                    var random = 10*Math.random();
+                    if(random>5){
+                        $(".sword1").text(wordexplain);
+                        $(".sword1").attr("id","trueword");
+                        $(".sword1").attr("name",wordid);
+                        $(".sword2").text(anotherword);
+                        $(".sword2").attr("id","falseword");
+                    }
+                    else{
+                        $(".sword2").text(wordexplain);
+                        $(".sword2").attr("id","trueword");
+                        $(".sword2").attr("name",wordid);
+                        $(".sword1").text(anotherword);
+                        $(".sword1").attr("id","falseword");
+                    };
+                    addtrueevent();
+                    addfalseevent();
+                    $("#wordstudy3").hide();
+                    $("#wordstudy1").show();
+                },
+                error: function(){
+                    alert("Error!");
+                },
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

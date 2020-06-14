@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.ShuoshuoMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.Shuoshuo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="Likes" jdbcType="INTEGER" property="likes" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="shuoshuo" jdbcType="LONGVARCHAR" property="shuoshuo" />
+  </resultMap>
+  <select id="FindshuoshouBytime" resultType="com.lanchaohao.wordcorner.domain.Shuoshuo">
+    select * from Shuoshuo s  order by s.createtime desc
+  </select>
+</mapper>

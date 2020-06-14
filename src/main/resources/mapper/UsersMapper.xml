@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanchaohao.wordcorner.dao.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.lanchaohao.wordcorner.domain.Users">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="usertype" jdbcType="INTEGER" property="usertype" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="registertime" jdbcType="TIMESTAMP" property="registertime" />
+    <result column="lastsign" jdbcType="TIMESTAMP" property="lastsign" />
+    <result column="signdays" jdbcType="INTEGER" property="signdays" />
+    <result column="examdate" jdbcType="TIMESTAMP" property="examdate" />
+    <result column="maxword" jdbcType="INTEGER" property="maxword" />
+  </resultMap>
+
+  <!--登陆查询-->
+  <select id="loginFind" resultType="com.lanchaohao.wordcorner.domain.Users">
+    select * from users where username = #{username} and password = #{password}
+  </select>
+  <select id="countByUsername" resultType="java.lang.Integer">
+    select count(*) from users where username = #{username}
+  </select>
+  <select id="findUserByUsername" resultType="com.lanchaohao.wordcorner.domain.Users">
+    select * from users where username = #{username}
+  </select>
+  <select id="signToday" resultType="com.lanchaohao.wordcorner.domain.Users">
+   select * from users u where u.username = #{username} and DateDiff(day,u.lastsign,getdate())=0
+  </select>
+</mapper>
