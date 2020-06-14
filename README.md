@@ -1,2 +1,0 @@
-# wordcorner
-2018
